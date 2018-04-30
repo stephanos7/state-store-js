@@ -61,6 +61,8 @@ function createStore(reducerFunctionFromApp){
 }
 
 
+// REDUCER for handling todos
+
 // 5. We need a way to tie a relevant ACTION to the internal STATE in the store that will final enable the state to evolve/become updated.
 //    We do this via a function called a REDUCER like the one below responsible for updating the state of todos
 //    The REDUCER will take in the relevant ACTION and the store's STATE
@@ -83,5 +85,20 @@ function todo(state=[], action){
   // if the ACTION type is not what we'd expect it to be then we simply return state
     default :
       return state;
+  }
+}
+
+// REDUCER for handling goals
+function goal(state=[], action){  
+  switch(action.type){
+    case 'ADD_GOAL' :
+      return state.concat([action.goal]);
+    case 'REMOVE_GOAL':
+      return state.filter( goal => goal.id !== action.id);
+    case 'TOGGLE_GOAL':
+      return state.map( goal => goal.id !== action.id ? goal :
+        Object.assign({}, goal, {complete: !goal.complete}));
+    default :
+    return state;
   }
 }
