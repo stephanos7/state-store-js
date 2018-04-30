@@ -1,4 +1,8 @@
 
+Create a store from scratch. 
+
+The steps to achieve that are described as comments within the store.js file. 
+
 Setting up central data stores is essential as it can help us prevebt duplication of data amongst components that need/use them equally. 
 
 Building a data store in Redux - as well as our regular JS app in this project - comprises of a single  Object which encapsulates the state tree. 
