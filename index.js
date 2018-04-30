@@ -49,7 +49,6 @@ function createStore(reducerFunctionFromApp){
     state = reducerFunctionFromApp(action, state);
     // now since we have updated state we need to call every listener function in the listners array and let them know of the change by invoking each one of them.
     listeners.forEach( listener => listener())
-
   }
 
 
@@ -70,12 +69,19 @@ function createStore(reducerFunctionFromApp){
 //    As per the PURE function prescription, it must not mutate the original arguments, so a NEW copy of state will be returned with every operation
 function todo(state=[], action){
   // use a switch to determine how to modify the state based on the TYPE of action provided
-
+  switch(action.type){
   // for example, in the case of adding a new to-do, we just concat the new item to the state using .concat()
   // because .concat() returns a new array, it doesn't mutate the original state but returns a new updated copy of it.
-
-  // similarly .map and .filter do not mutate the original argument and return a new array/copy of state.
-
+    case 'ADD_TODO' :
+      return state.concat([action.todo]);
+  // similarly .map and .filter with Object.assign do not mutate the original argument and return a new array/copy of state.
+    case 'REMOVE_TODO' :
+      return state.filter(todo => todo.id !== action.id);
+    case 'TOGGLE_TODO' :
+      return state.map((todo) => todo.id !== action.id ? todo :
+      Object.assign({}, todo, { complete: !todo.complete }));
   // if the ACTION type is not what we'd expect it to be then we simply return state
-  return state
+    default :
+      return state;
+  }
 }
