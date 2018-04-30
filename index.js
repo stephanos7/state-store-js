@@ -1,7 +1,7 @@
 
 
-// 1. define a factory function that creates an instance of the store.
-function Store(){
+// 1. define a factory function that creates an instance of the store (and gets passed a REDUCER function from our app)
+function createStore(reducerFunctionFromApp){
   // each instance of Store is comprised of four elements:
 
   // A. the state tree (the source of truth)
@@ -40,13 +40,24 @@ function Store(){
 
   // 6. Once the REDUCER reduces the relevant action and the previous state to a new copy of the updated state
   //    we need to take that copy and actually process the state update in the store tree. 
+  //    although the reducer is an app specific function we have passed it in as an argument to the createStore function, hence we have acces to it
   //    we will do this with a function called DISPATCH
+  //    to achieve the change update like the REDUCER, needs the relevant ACTION and the NEW copy of state that needs to be updated in the state tree
+  //    DISPATCH will call the REDUCER to provide it with the new uodated copy of state
+  //    but it also needs to take in the relevant ACTION as the action provided to REDUCER was consumed for the production of a new updated copy of state
+  const dispatch = (action) => {
+    state = reducerFunctionFromApp(action, state);
+    // now since we have updated state we need to call every listener function in the listners array and let them know of the change by invoking each one of them.
+    listeners.forEach( listener => listener())
+
+  }
 
 
   // return an object to the user containing the stores' interface properties 
   return {
     getState,
-    subscribe
+    subscribe,
+    dispatch
   }
 }
 
