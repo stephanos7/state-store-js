@@ -1,0 +1,24 @@
+.wrapper {
+  margin-top: 50px;
+}
+.headers {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.list {
+  padding: 25px 0;
+  background-color: lightcoral;
+  border-radius: 5px;
+}
+
+.add-new-container {
+  padding: 25px 0;
+  background-color: lightblue;
+  border-radius: 5px;
+}
+
+.add-new-form {
+  width: 60%;
+  margin: 0 auto;
+}
