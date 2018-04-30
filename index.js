@@ -11,9 +11,7 @@ function createStore(reducerFunctionFromApp){
   // D. interface to update the state
 
   // 2. define a state variable which will hold the state tree
-  let state = {
-
-  }
+  let state 
   // 4a.provide a way to listen for changes on the state
   //    the user will want to subscribe to the store to listen to changes 
   //    so we need to collect every fn passed in whenever the user subscribes to the store
@@ -46,7 +44,7 @@ function createStore(reducerFunctionFromApp){
   //    DISPATCH will call the REDUCER to provide it with the new uodated copy of state
   //    but it also needs to take in the relevant ACTION as the action provided to REDUCER was consumed for the production of a new updated copy of state
   const dispatch = (action) => {
-    state = reducerFunctionFromApp(action, state);
+    state = reducerFunctionFromApp(state, action);
     // now since we have updated state we need to call every listener function in the listners array and let them know of the change by invoking each one of them.
     listeners.forEach( listener => listener())
   }
@@ -69,7 +67,7 @@ function createStore(reducerFunctionFromApp){
 //    As such it must adher to rule #2 (see readme)ie, it must be a PURE function so that it doesn't mutate the original copy of state
 //    Since the first time we call the REDUCER, the state may be empty or undefined, we use a default argument to specify that it will at least be passed in as an empty array
 //    As per the PURE function prescription, it must not mutate the original arguments, so a NEW copy of state will be returned with every operation
-function todo(state=[], action){
+function todos(state=[], action){
   // use a switch to determine how to modify the state based on the TYPE of action provided
   switch(action.type){
   // for example, in the case of adding a new to-do, we just concat the new item to the state using .concat()
@@ -89,7 +87,12 @@ function todo(state=[], action){
 }
 
 // REDUCER for handling goals
-function goal(state=[], action){  
+
+// 7. If we now go ahead and create a goals REDUCER we need to combine both the todos and goals reducers
+//    into one single reducer, since as we've just seen in step #6 (and #1) our createStore factory function
+//    will only accept one reducer as an argument to updating the whole state tree.
+//    which takes us to step 8...
+function goals(state=[], action){  
   switch(action.type){
     case 'ADD_GOAL' :
       return state.concat([action.goal]);
@@ -102,3 +105,24 @@ function goal(state=[], action){
     return state;
   }
 }
+
+// 8. Let's create a ROOT REDUCER called app
+//    the ROOT REDUCER will return a new copy of state just like our single reducers
+//    but instead of returning an array of either goals or todos
+//    it will return a state object containing both as properties
+//    within each property we invoke the single reducer functions we have defined earlier 
+//    as with the prev REDUCERS, the ROOT REDUCER takes state and an action as arguments
+//    which will be passed to each individual reducer functions
+//    the root reducer will be the function passed to createStore
+function app(state={}, action){
+  return {
+    todos: todos(state.todos, action),
+    goals: goals(state.goals, action)
+  }
+}
+
+const store = createStore(app);
+
+store.subscribe(() => {
+  console.log('The new state is: ', store.getState())
+})

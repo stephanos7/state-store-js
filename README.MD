@@ -26,13 +26,13 @@ The three interfaces together with the state tree make up the actual data store 
 
 ## Rules governing the store:
 
-1. Only a recognised ACTION (event) can change the store's state. Every ACTION should have a "type" property.
+* Only a recognised ACTION (event) can change the store's state. Every ACTION should have a "type" property.
 
   add ACTION code.
 
-2. The function that returns the new state needs to be a PURE function. 
+* The function that returns the new state needs to be a PURE function. 
 
-  * Return the same result if the same arguments are passed in
-  * Depend solely on the arguments passed into them
-  * Do not produce side effects
+  a. Return the same result if the same arguments are passed in
+  b. Depend solely on the arguments passed into them
+  c. Do not produce side effects
 
