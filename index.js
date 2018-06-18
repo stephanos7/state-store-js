@@ -1,4 +1,4 @@
-
+//STORE CODE
 
 // 1. define a factory function that creates an instance of the store (and gets passed a REDUCER function from our app)
 function createStore(reducerFunctionFromApp){
@@ -120,6 +120,60 @@ function app(state={}, action){
   }
 }
 
+// APP ONLY CODE
+// action types
+const ADD_TODO = "ADD_TODO";
+const REMOVE_TODO = "REMOVE_TODO";
+const TOGGLE_TODO = "TOGGLE_TODO";
+
+const ADD_GOAL = "ADD_GOAL";
+const REMOVE_GOAL = "REMOVE_GOAL";
+const TOGGLE_GOAL = "TOGGLE_GOAL";
+
+// action creators
+const addToDoActionCreator = (todo) => {
+  return {
+    type: ADD_TODO,
+    todo
+  }
+};
+
+const removeToDoActionCreator = (id) => {
+  return {
+    type: REMOVE_TODO,
+    id
+  }
+};
+
+const toggleToDoActionCreator = (id) => {
+  return {
+    type: TOGGLE_TODO,
+    id
+  }
+};
+
+const addGoalActionCreator = (goal) => {
+  return {
+    type: ADD_GOAL,
+    goal
+  }
+};
+
+const removeGoalActionCreator = (id) => {
+  return {
+    type: REMOVE_GOAL,
+    id
+  }
+};
+
+const toggleGoalActionCreator = (id) => {
+  return {
+    type: TOGGLE_GOAL,
+    id
+  }
+};;
+
+
 const store = createStore(app);
 
 
@@ -127,29 +181,10 @@ store.subscribe(() => {
   console.log('The new state is: ', store.getState())
 })
 
-store.dispatch({
-  type: "ADD_GOAL",
-  goal:{
-    id: 001,
-    description: "hello world goal",
-    complete: false
-  }
-})
+store.dispatch(addGoalActionCreator({description: "hello again", id:001}))
 
+store.dispatch(addToDoActionCreator({description: "hello again todo", id:101}))
 
-store.dispatch({
-  type: "ADD_TODO",
-  todo:{
-    id: 001,
-    description: "hello world todo"
-  }
-})
+store.dispatch(removeToDoActionCreator(101));
 
-store.dispatch({
-  type: "ADD_GOAL",
-  todo:{
-    id: 002,
-    description: "hello world again",
-    complete: false
-  }
-})
+store.dispatch(toggleGoalActionCreator(001));
