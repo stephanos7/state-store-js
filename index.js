@@ -11,7 +11,7 @@ function createStore(reducerFunctionFromApp){
   // D. interface to update the state
 
   // 2. define a state variable which will hold the state tree
-  let state 
+  let state;
   // 4a.provide a way to listen for changes on the state
   //    the user will want to subscribe to the store to listen to changes 
   //    so we need to collect every fn passed in whenever the user subscribes to the store
@@ -20,7 +20,7 @@ function createStore(reducerFunctionFromApp){
 
   // interfaces
   // 3. provide a way to get access to the state variable
-  const getState  = () => state
+  const getState  = () => state;
 
   // 4b.provide a way to listen for changes on the state
   //    provide a subscribe method for the user to subscribe to the store and listen for changes
@@ -38,10 +38,9 @@ function createStore(reducerFunctionFromApp){
 
   // 6. Once the REDUCER reduces the relevant action and the previous state to a new copy of the updated state
   //    we need to take that copy and actually process the state update in the store tree. 
-  //    although the reducer is an app specific function we have passed it in as an argument to the createStore function, hence we have acces to it
+  //    Because the reducer is an app specific function we have passed it in as an argument to the createStore factory fanction in order to be able to acces it
   //    we will do this with a function called DISPATCH
-  //    to achieve the change update like the REDUCER, needs the relevant ACTION and the NEW copy of state that needs to be updated in the state tree
-  //    DISPATCH will call the REDUCER to provide it with the new uodated copy of state
+  //    DISPATCH will call the REDUCER to provide it with the new copy of state
   //    but it also needs to take in the relevant ACTION as the action provided to REDUCER was consumed for the production of a new updated copy of state
   const dispatch = (action) => {
     state = reducerFunctionFromApp(state, action);
@@ -61,10 +60,10 @@ function createStore(reducerFunctionFromApp){
 
 // REDUCER for handling todos
 
-// 5. We need a way to tie a relevant ACTION to the internal STATE in the store that will final enable the state to evolve/become updated.
+// 5. We need a way to tie a relevant ACTION to the internal STATE in the store that will finally enable the state to evolve/become updated.
 //    We do this via a function called a REDUCER like the one below responsible for updating the state of todos
-//    The REDUCER will take in the relevant ACTION and the store's STATE
-//    As such it must adher to rule #2 (see readme)ie, it must be a PURE function so that it doesn't mutate the original copy of state
+//    The REDUCER will take in the relevant ACTION and the store's current STATE and reduce them to a newly returned state
+//    As such it must adher to rule #2 (see readme)i.e., it must be a PURE function so that it doesn't mutate the original copy of state
 //    Since the first time we call the REDUCER, the state may be empty or undefined, we use a default argument to specify that it will at least be passed in as an empty array
 //    As per the PURE function prescription, it must not mutate the original arguments, so a NEW copy of state will be returned with every operation
 function todos(state=[], action){
@@ -123,6 +122,34 @@ function app(state={}, action){
 
 const store = createStore(app);
 
+
 store.subscribe(() => {
   console.log('The new state is: ', store.getState())
+})
+
+store.dispatch({
+  type: "ADD_GOAL",
+  goal:{
+    id: 001,
+    description: "hello world goal",
+    complete: false
+  }
+})
+
+
+store.dispatch({
+  type: "ADD_TODO",
+  todo:{
+    id: 001,
+    description: "hello world todo"
+  }
+})
+
+store.dispatch({
+  type: "ADD_GOAL",
+  todo:{
+    id: 002,
+    description: "hello world again",
+    complete: false
+  }
 })
