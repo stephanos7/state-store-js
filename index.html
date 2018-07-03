@@ -32,8 +32,8 @@
       </div>
       <div class="todo-list-section">
         <h3 class="headers">Your to-do list</h3>
-        <ul class="list">
-            <li> a todo</li>
+        <ul class="list" id="todo-list">
+
         </ul>
       </div>
     </div>
@@ -218,11 +218,15 @@
 
 
       store.subscribe(() => {
-        console.log('The new state is: ', store.getState())
+        const {goals, tasks} = store.getState();
+
+        goals.forEach(appendGoal);
+        tasks.forEach(appendTask);
       })
 
-      // CONNECT UI + STATE
-
+      // CONNECT DOM CODE (UI) + STATE
+  
+      // creat a new todo
       const toDoSelector = document.getElementById("to-do-type");
 
       const getDescription = () => {
@@ -248,9 +252,30 @@
       document.getElementById("create-button")
       .addEventListener("click", (e) => createNew(e, getDescription));
 
-      // store.dispatch(removeToDoActionCreator(101));
+        // store.dispatch(removeToDoActionCreator(101));
 
-      // store.dispatch(toggleGoalActionCreator(001));
+        // store.dispatch(toggleGoalActionCreator(001));
+
+      //show the list of todos
+      const todoList = document.getElementById("todo-list");
+
+      const appendTask = (task) => {
+        const listItem = document.createElement("li");
+        const text = document.createTextNode(`TASK: ${task.description}`);
+
+        listItem.appendChild(text);
+        todoList.appendChild(listItem);
+      }
+
+      const appendGoal = (goal) => {
+        const listItem = document.createElement("li");
+        const text = document.createTextNode(`GOAL: ${goal.description}`);
+
+        document.getElementById("todo-list").innerHTML = "";
+
+        listItem.appendChild(text);
+        todoList.appendChild(listItem);
+      }
 
     </script>
   </body>
